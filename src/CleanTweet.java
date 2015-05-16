@@ -25,48 +25,6 @@ public class CleanTweet {
 
 		text = text.replace(at, "").replace(hash, "");
 	
-		/*
-		int i=0;
-		File file = new File("SlangLookupTable.txt");
-
-		try {
-			FileReader fileReader = new FileReader(file);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			String line;
-
-			String[][] slangs = {{"", ""}};
-
-			while ((line = bufferedReader.readLine()) != null) {
-				String[] word = line.split("::");
-			    //slangs[i][0] = word[0];
-			    //slangs[i++][1] = word[1]; 
-			    System.out.println(word[0] + "\t" + word[1]);
-			    //System.out.println(line);
-			}
-			fileReader.close();
-		}
-		catch (Exception e) {
-
-		}
-		finally {
-			
-		}
-		System.out.println(i);
-		*/
 		return text;
-
-	}
-
-	public static void main(String[] args) {
-
-		System.out.println(clean("HELLO! #happy hey"));
-		System.out.println(clean("@umer: HELLO! #happy"));
-		System.out.println(clean("HELLO! @umer #happy"));
-		System.out.println(clean("HELLO! @noor www.google.com #happy"));
-		System.out.println(clean("HELLO! http://www.twitter.com #happy"));
-		System.out.println(clean("HELLO! bitly.com #happy"));
-		System.out.println(clean("HELLO! #happy"));
-		System.out.println(clean("HELLO! #happy"));
-
 	}
 }

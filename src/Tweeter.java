@@ -16,10 +16,24 @@ public class Tweeter {
 		String topic = args[0];
 		ArrayList<Status> tweets = readTweets(topic);
 		HashMap<Integer, Integer> sentiments = new HashMap<Integer, Integer>();
+
+		sentiments.put(0, 0);
+		sentiments.put(1, 0);
+		sentiments.put(2, 0);
+		sentiments.put(3, 0);
+		sentiments.put(4, 0);
+
 		NLP.init();
 		for(Status tweet : tweets) {
-			int sentiment = NLP.findSentiment(tweet.getText());
-			System.out.println(tweet.getText() + " : " + sentiment);
+			int sentiment = NLP.findSentiment(CleanTweet.clean(tweet.getText()));
+			System.out.println(CleanTweet.clean(tweet.getText()) + " : " + sentiment);
+			sentiments.put(sentiment, sentiments.get(sentiment)+1);
+			if(tweet.getPlace() != null)
+				System.out.println("Place: " + tweet.getPlace().getFullName());
+		}
+
+		for (Integer i: sentiments.keySet()) {
+			System.out.println("Sentiment " + i + " --> Count " + sentiments.get(i));
 		}
 	}
 

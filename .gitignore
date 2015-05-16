@@ -12,6 +12,9 @@
 hs_err_pid*
 
 # data files
-serialized/
+build/serialized/
 data/
 libs/
+
+# dummy files
+foo*.txt
