@@ -13,6 +13,7 @@ hs_err_pid*
 
 # data files
 build/serialized/
+build/inputs/
 data/
 libs/
 

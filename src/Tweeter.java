@@ -2,13 +2,18 @@ import twitter4j.Status;
 import twitter4j.TwitterException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 public class Tweeter {
 
@@ -24,12 +29,16 @@ public class Tweeter {
 		sentiments.put(4, 0);
 
 		NLP.init();
+
+		createCSVFile(topic, tweets);
+
 		for(Status tweet : tweets) {
 			int sentiment = NLP.findSentiment(CleanTweet.clean(tweet.getText()));
 			System.out.println(CleanTweet.clean(tweet.getText()) + " : " + sentiment);
 			sentiments.put(sentiment, sentiments.get(sentiment)+1);
-			if(tweet.getPlace() != null)
-				System.out.println("Place: " + tweet.getPlace().getFullName());
+			if(tweet.getPlace() != null) {
+				System.out.println("Place: " + tweet.getGeoLocation());
+			}
 		}
 
 		for (Integer i: sentiments.keySet()) {
@@ -44,9 +53,39 @@ public class Tweeter {
 			tweets = readTweetsFromFile(topic);
 		} else {
 			tweets = TweetManager.getTweets(topic);
-			writeTweetsToFile(topic, tweets);			
+			writeTweetsToFile(topic, tweets);
 		}
 		return tweets;
+	}
+
+	static void createCSVFile(String filename, ArrayList<Status> list)
+	{
+		try {
+			CSVWriter writer = new CSVWriter(new FileWriter("inputs/" + filename + ".csv"));
+
+			for(Status tweet : list) {
+				String[] entries = new String[5];
+				entries[0] = CleanTweet.clean(tweet.getText());
+				Calendar cal = Calendar.getInstance();
+			    cal.setTime(tweet.getCreatedAt());
+			    int year = cal.get(Calendar.YEAR);
+			    int month = cal.get(Calendar.MONTH);
+			    int day = cal.get(Calendar.DAY_OF_MONTH);
+				entries[1] = "" + year;
+				entries[2] = "" + month;
+				entries[3] = "" + day;
+				if(tweet.getPlace() != null) {
+					entries[4] = tweet.getPlace().getFullName();
+				} else {
+					entries[4] = "";
+				}
+				writer.writeNext(entries);
+			}
+
+			writer.close();
+		} catch (IOException e) {
+			System.out.println("Error writing to CSV file.");
+		}
 	}
 
 	static void writeTweetsToFile(String filename, ArrayList<Status> list)

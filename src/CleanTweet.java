@@ -23,7 +23,7 @@ public class CleanTweet {
 		    text = text.replace(url, "");
 		}
 
-		text = text.replace(at, "").replace(hash, "");
+		text = text.replace(at, "").replace(hash, "").replace("\n", "").replaceAll("[^\\x00-\\x7f]", "");
 	
 		return text;
 	}
